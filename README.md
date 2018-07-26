@@ -10,11 +10,11 @@ yarn
 ```
 
 ## To run storybook
-``
+```
 yarn dev
-``
+```
 
 ## To run application 
-``
+```
 yarn start
-``
+```
