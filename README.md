@@ -2,8 +2,10 @@
 
 ## To get started
 ``
-git clone
+git clone https://github.com/sarahheacock/native-storybook.git
+
 cd ./native-storybook
+
 yarn
 ``
 
