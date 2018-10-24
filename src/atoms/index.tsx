@@ -1,28 +1,13 @@
-import React from 'react';
-import { storiesOf } from '@storybook/react-native';
-
-import {
-    View,
-    // Text
-} from 'react-native'
+import * as React from 'react';
+// import { storiesOf } from '@storybook/react-native';
+import { storiesOf } from '@storybook/react';
 
 import TextAtom from './TextAtom';
-import VerticalLineAtom from './VerticalLineAtom';
-import HorizontalLineAtom from './HorizontalLineAtom';
+// import VerticalLineAtom from './VerticalLineAtom';
+// import HorizontalLineAtom from './HorizontalLineAtom';
 
 // atom has no position or padding but will scale to molecule
-const myStory = storiesOf('Atoms')
-    .add('verticalLine', () => (
-        <VerticalLineAtom />
-    ))
-    .add('horizontalLine', () => (
-        <View>
-            <TextAtom styleType="one">
-                Hello, World
-            </TextAtom>
-            <HorizontalLineAtom />
-        </View>
-    ))
+const myStory = (storiesOf('atoms', module) as any)
     .add('textOne', () => (
         <TextAtom styleType="one">
             Hello, World

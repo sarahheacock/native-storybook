@@ -17,6 +17,7 @@
   NSURL *jsCodeLocation;
 
   jsCodeLocation = [[RCTBundleURLProvider sharedSettings] jsBundleURLForBundleRoot:@"index" fallbackResource:nil];
+  // jsCodeLocation = [[NSBundle mainBundle] URLForResource:@"main" withExtension:@"jsbundle"];
 
   RCTRootView *rootView = [[RCTRootView alloc] initWithBundleURL:jsCodeLocation
                                                       moduleName:@"NativeDemo"
@@ -33,3 +34,60 @@
 }
 
 @end
+
+// /**
+//  * Copyright (c) 2015-present, Facebook, Inc.
+//  *
+//  * This source code is licensed under the MIT license found in the
+//  * LICENSE file in the root directory of this source tree.
+//  */
+
+// #import "AppDelegate.h"
+
+// #import <React/RCTBundleURLProvider.h>
+// #import <React/RCTRootView.h>
+
+// @implementation AppDelegate
+
+// - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
+// {
+//   NSURL *jsCodeLocation;
+
+//   // DEV
+//   // jsCodeLocation = [[RCTBundleURLProvider sharedSettings] jsBundleURLForBundleRoot:@"index" fallbackResource:nil];
+
+//   // ================PROD========================
+//   // precreate offline bundle
+//   // make api request and download offline bundle
+//   // download to ../build/Build/Products/Release-iphonesimulator/NativeDemo.app/main.jsbundle
+//   jsCodeLocation = [[NSBundle mainBundle] URLForResource:@"main" withExtension:@"jsbundle"];
+//   // if (![self hasCodeInDocumentsDirectory]) {
+//   //   [self copyBundleFileToURL:bundleURL];
+//   // }
+
+//   // RCTBridge *bridge = [self createBridgeWithBundleURL:bundleURL];
+//   // [self createViewWithBridge:bridge];
+//   // [self downloadNewCodeToURL:bundleURL];
+//   // =============================================
+
+//   RCTRootView *rootView = [[RCTRootView alloc] initWithBundleURL:jsCodeLocation
+//                                                       moduleName:@"NativeDemo"
+//                                                initialProperties:nil
+//                                                    launchOptions:launchOptions];
+//   rootView.backgroundColor = [[UIColor alloc] initWithRed:1.0f green:1.0f blue:1.0f alpha:1];
+
+//   self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
+//   UIViewController *rootViewController = [UIViewController new];
+//   rootViewController.view = rootView;
+//   self.window.rootViewController = rootViewController;
+//   [self.window makeKeyAndVisible];
+
+//   // Place this code after "[self.window makeKeyAndVisible]" and before "return YES;"
+//   UIView* launchScreenView = [[[NSBundle mainBundle] loadNibNamed:@"LaunchScreen" owner:self options:nil] objectAtIndex:0];
+//   launchScreenView.frame = self.window.bounds;
+//   rootView.loadingView = launchScreenView;
+
+//   return YES;
+// }
+
+// @end

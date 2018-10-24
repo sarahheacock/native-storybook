@@ -37,7 +37,8 @@ function createPromise(arg, done){
     return myPromise;
 }
 
-const startStoryBook = createPromise("storybook start -p 7007", "Loading dependency graph, done.");
+// const startStoryBook = createPromise("storybook start -p 7007", "Loading dependency graph, done.");
+const startStoryBook = createPromise("storybook start -p 7007", "Storybook started");
 
 startStoryBook.then(m => {
     console.log(chalk.green(m));

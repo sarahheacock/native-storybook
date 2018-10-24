@@ -1,17 +1,17 @@
-import React from 'react'
+import React from 'react';
 import {
     Text,
     View
-} from 'react-native'
+} from 'react-native';
 
 interface TextProps {}
 
 const TextArea: React.SFC<TextProps> = () => {
     return (
         <View>
-            <Text>Hello, World!</Text>
+            <Text>Hello, Human!</Text>
         </View>
     )
 }
 
-export default TextArea
+export default TextArea;
