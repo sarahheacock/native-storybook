@@ -5,7 +5,7 @@ import './addons';
 
 // import stories 
 configure(() => {
-    require('../src/stories');
+    require('../src/atoms/ButtonPrimary/stories.tsx');
 }, module)
 
 const StorybookUI = getStorybookUI({

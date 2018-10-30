@@ -20,4 +20,13 @@
 // });
 
 const bundle = require('./scripts/bundle.js');
-bundle();
+
+const query = {selectedKind: "atoms/ButtonPrimary", selectedStory: "Unfocused with no icon"};
+const html = `<View>
+    Hello
+    <ButtonPrimary  title="button1" />
+    <ButtonPrimary  title="button1" />
+</View>`;
+
+
+bundle(query, html);

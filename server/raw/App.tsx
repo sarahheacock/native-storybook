@@ -5,10 +5,7 @@ import {
 } from 'react-native';
 
 
-/* NEWCOMP */import MyComponent from '/Users/sheacock/Desktop/NativeDemo/src/atoms/TextArea';/* NEWCOMP */
-/* NEWPROPS */const myProps = {
-    text: "bye"
-};/* NEWPROPS */
+/* NEWCOMP */import ButtonPrimary from '/Users/sheacock/Desktop/NativeDemo/src/atoms/ButtonPrimary';/* NEWCOMP */
 
 
 type Props = {};
@@ -16,7 +13,11 @@ export default class App extends Component<Props> {
     render() {
         return (
             <View>
-                <MyComponent {...myProps} />
+                {/* NEWPROPS */}<View>
+    Hello
+    <ButtonPrimary  title="button1" />
+    <ButtonPrimary  title="button1" />
+</View>{/* NEWPROPS */}
             </View>
         );
     }

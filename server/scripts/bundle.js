@@ -3,9 +3,9 @@ const fs = require('fs');
 const { spawn } = require('child_process');
 const cacheFiles = true;
 
-const getSrc = () => {
+const getSrc = (selectedKind) => {
     // TODO
-    return path.resolve(__dirname, '../../src/atoms/TextArea');
+    return path.resolve(__dirname, `../../src/${selectedKind}`);
 };
 
 const getProps = () => {
@@ -44,14 +44,14 @@ const writeApp = (appPath, str) => (
     })
 );
 
-const rewriteApp = ({ src, props }) => {
+const rewriteApp = ({ src, props, compName }) => {
     const appPath = path.resolve(__dirname, '../raw/App.tsx');
     
     return readApp(appPath).then(text => {
         const newComp = '/* NEWCOMP */';
-        const newProps = '/* NEWPROPS */';
-        const strWithNewComp = searchAndReplace(newComp, text, `import MyComponent from '${src}';`);
-        const strWithNewProps = searchAndReplace(newProps, strWithNewComp, `const myProps = ${JSON.stringify(props, null, 4).replace(/\"([^(\")"]+)\":/g,"$1:")};`)
+        const newProps = '{/* NEWPROPS */}';
+        const strWithNewComp = searchAndReplace(newComp, text, `import ${compName} from '${src}';`);
+        const strWithNewProps = searchAndReplace(newProps, strWithNewComp, props)
         return writeApp(appPath, strWithNewProps);
     })
     // .then(m => {
@@ -61,28 +61,40 @@ const rewriteApp = ({ src, props }) => {
     // });
 };
 
+// ==============SIMULATOR====================================
+const updateAppetize = (newFile) => {
+    console.log('NEW FILE', newFile);
+    // curl https://APITOKEN@api.appetize.io/v1/apps -F "file=@file_to_upload.zip" -F "platform=ios"
+    const filePath = path.resolve(__dirname, `../bundled/${newFile}`);
+    const key = '7ngm2qqmwybqx0z8zgdhhwn0km';
+    const token = 'private_c311wb7pznhbkzpbtz943wqb0w';
+    return command(`curl https://${token}@api.appetize.io/v1/apps/${key} -F "file=@${filePath}" -F "platform=ios"`)
+}
+
 // ===============BUNDLE======================================
-const command = (args) => {
-    return new Promise((res, rej) => {
+const command = (args, message) => (
+    new Promise((res, rej) => {
+        console.log(message);
         const arr = args.split(' ');
         const shell = spawn(arr[0], arr.slice(1));
         let output = '';
 
         shell.stdout.on('data', (data) => {
-            // console.log(`stdout: ${data}`);
+            console.log(`stdout: ${data}`);
             output += data;
         });
 
         shell.stderr.on('data', (data) => {
-            return rej(`${data}`);
+            rej(`${data}`);
         });
 
         shell.on('close', (code) => {
+            res(message);
             console.log(`child process exited with code ${code}`);
-            return res(output);
+            // return res(output);
         });
-    });
-}
+    })
+)
 
 const makeid = (cache) => {
     const arr = [];
@@ -101,13 +113,16 @@ const makeid = (cache) => {
     return id;
 }
 
+let newPath;
+// creates a bundled jsx transpiled js file
+// react-native bundle --platform ios --dev false --entry-file server/raw/index.js --bundle-output ios/build/Build/Products/Release-iphonesimulator/NativeDemo.app/main.jsbundle --assets-dest ios
 const bundleAndZip = ({ src, props }) => {
     // check cache for bundled file
     const cachePath = path.resolve(__dirname, '../bundled/cache.json');
-    const key = `${src}${JSON.stringify(props)}`;
+    // const key = `${src}${JSON.stringify(props)}`;
+    const key = 'foo';
     let cache;
     let val;
-    let newPath;
 
     return readApp(cachePath).then(text => {
         cache = JSON.parse(text);
@@ -118,49 +133,52 @@ const bundleAndZip = ({ src, props }) => {
         }
 
         newPath = makeid(cache);
-        console.log(newPath);
+        // console.log(newPath);
         // return command('react-native run-ios --configuration Release');
         const entry = path.resolve(__dirname, '../raw/index.js');
         const output = path.resolve(__dirname, '../../ios/build/Build/Products/Release-iphonesimulator/NativeDemo.app');
         const arg = `react-native bundle --platform ios --dev false --entry-file ${entry} --bundle-output ${output}/main.jsbundle --assets-dest ${output}`;
-        console.log(arg);
+        // const arg = 'react-native --help';
+        // console.log(arg);
         return command(arg)
-    }).then(data => {
-        // console.log(data);
-        if (val && cacheFiles) {
-            return Promise.resolve();
-        }
-        
-        console.log(path.resolve(__dirname, '../bundled/' + newPath));
-        return command(`tar -czf ${path.resolve(__dirname, '../bundled/' + newPath)} ${path.resolve(__dirname, '../../ios/build/Build/Products/Release-iphonesimulator/*.app')}`)
+    }).then(m => {
+        const dest = path.resolve(__dirname, '../bundled');
+        const origin = path.resolve(__dirname, '../../ios/build/Build/Products/Release-iphonesimulator/NativeDemo.app')
+        const zip = `tar -czf ${dest}/${newPath} ${origin}`;
+        // console.log(zip, newPath, m);
+        return command(zip, newPath);
+    }).catch(err => {
+        console.log(err);
+    }).then(m => {
+        console.log(m);
+        return updateAppetize(newPath);
     })
-    // .catch(err => {
-    //     console.log(err);
-    // });
+
     // if cached, return path
     // if not, bundle files
     // zip files and move zip into bundled directory with randomly generated filename
     // update cache record
 }
 
-// ==============SIMULATOR====================================
-const updateAppetize = (newFile) => {
-
-}
-
 // =========================================================
-const bundle = () => {
+// TODO:
+// (1) rearrange atom files
+// (2) see if storybook and storybook static can handle the view tags
+// (3) better understand cli
+// (4) finish writing compile script for build time
+const bundle = (query, html) => {
     // determine src point
-    const src = getSrc();
+    const { selectedKind } = query;
+    const src = getSrc(selectedKind);
     // get new props
-    const props = getProps();
+    // const props = getProps();
+    const props = html;
+    const compName = selectedKind.slice(selectedKind.indexOf('/') + 1)
 
     // update App.tsx with new src
     // update App.tsx with new props
-    rewriteApp({ src, props }).then(m => {
+    rewriteApp({ src, props, compName }).then(m => {
         return bundleAndZip({ src, props })
-    }).then(data => {
-        console.log(data);
     }).catch(err => {
         console.log(err);
     });

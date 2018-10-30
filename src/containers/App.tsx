@@ -4,7 +4,7 @@
  */
 
 import React from 'react'
-import { Component } from 'react';
+// import { Component } from 'react';
 import {
   Platform,
   StyleSheet,
@@ -20,13 +20,13 @@ const instructions = Platform.select({
 });
 
 
-type Props = {};
-export default class App extends Component<Props> {
+// type Props = {};
+export default class App extends React.Component<{}, {}> {
   render() {
     return (
       <View style={styles.container}>
         <Text style={styles.welcome}>
-          Welcome to React Native!
+          hello!!!
         </Text>
         <Text style={styles.instructions}>
           To get started, edit App.js

@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { parseSearch, getChildren } from './helper';
 
 export interface MyFrameProps {
     children?: any;
@@ -37,10 +38,17 @@ export class MyFrame extends React.PureComponent<MyFrameProps, MyFrameState> {
     }
 
     componentDidMount() {
-        console.log('MOUNT');
+        const obj = parseSearch(window.location.search);
+        const str = getChildren(this.props.children, obj);
+
         // use url to determine src
         // rebundle from src and save to zip
-        // make post request and save zip to 
+        // make post request to Appetize with zip
+        console.log(obj, str);
+    }
+
+    componentDidUpdate() {
+        // console.log(window.location.search);
     }
 
     handleClick = (e: any) => {
@@ -53,8 +61,6 @@ export class MyFrame extends React.PureComponent<MyFrameProps, MyFrameState> {
     }
 
     render() {
-        console.log(this.props.children);
-
         const publicKey = '7ngm2qqmwybqx0z8zgdhhwn0km';
         const src = Object.keys(this.state).reduce((arr: string[], key) => {
             const val = urlify(buttons[key][this.state[key]]);
