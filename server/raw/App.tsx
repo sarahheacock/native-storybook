@@ -5,21 +5,13 @@ import {
 } from 'react-native';
 
 
-/* NEWCOMP */import ButtonPrimary from '/Users/sheacock/Desktop/NativeDemo/src/atoms/ButtonPrimary';/* NEWCOMP */
+/* NEWCOMP */import { ButtonPrimary } from '/Users/sheacock/Desktop/NativeDemo/src/atoms/ButtonPrimary';/* NEWCOMP */
 
 
 type Props = {};
 export default class App extends Component<Props> {
     render() {
-        return (
-            <View>
-                {/* NEWPROPS */}<View>
-    Hello
-    <ButtonPrimary  title="button1" />
-    <ButtonPrimary  title="button1" />
-</View>{/* NEWPROPS */}
-            </View>
-        );
+        /* NEWPROPS */return ( <View><ButtonPrimary title="button2" /></View> );/* NEWPROPS */
     }
 }
 

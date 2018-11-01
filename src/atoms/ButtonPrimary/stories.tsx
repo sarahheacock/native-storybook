@@ -20,7 +20,6 @@ const stories = (storiesOf("atoms/ButtonPrimary", module) as any)
 
         return (
             <View style={style.main}>
-                Hello
                 <ButtonPrimary
                     title={title}
                     // onPress={() => {}}

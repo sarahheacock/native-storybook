@@ -70,18 +70,10 @@ const createHtml = (children: ReactNode, componentType: string): string => {
 
         // storied component
         if (!currentChildren) {
-            return `
-                ${str}
-                <${name} ${getProps(props)} />
-            `;
+            return `${str}<${name}${getProps(props)} />`;
         }
 
-        return `
-            ${str}
-            <${name} ${getProps(props)}>
-                ${currentChildren}
-            </${name}>
-        `;
+        return `${str}<${name}${getProps(props)}>${currentChildren}</${name}>`;
 
     }, '');
 }
